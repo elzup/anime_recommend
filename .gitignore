@@ -1,0 +1,10 @@
+
+test/
+vendor/
+key.php
+php.ini
+
+.htaccess
+tmp
+composer.lock
+

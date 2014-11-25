@@ -1,0 +1,11 @@
+{
+    "require": {
+        "slim/slim": "2.*",
+        "abraham/twitteroauth": "dev-master"
+    },
+    "autoload": {
+        "classmap": [
+            "vendor/abraham/twitteroauth/twitteroauth/"
+        ]
+    }
+}
