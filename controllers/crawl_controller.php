@@ -6,23 +6,32 @@
 
 class CrawlController {
 
-    public function getTitles() {
-        $this->login();
-        $i = 1;
-        while (TRUE) {
-            $html = $this->getHtml(URL_ANICORE_RANK . $i);
-            echo $html->find('title', 0)->innertext;
-            echo "<br />";
-            $i++;
-//            exit;
-            if ($i > 5) {
-                break;
-            }
-        }
-    }
 
     public $init = FALSE;
     public $ckfile;
+
+    public function getTitles() {
+        set_time_limit(1000);
+        $this->login();
+        $end = 1;
+//        $end = 122;
+        foreach (range(1, $end) as $i) {
+            $html = $this->getHtml(URL_ANICORE_RANK . $i);
+            if ($html === FALSE) {
+                echo 'exit';
+                break;
+            }
+            $this->getTitlesManagePage($html);
+//            exit;
+        }
+    }
+
+    public function getTitlesManagePage($html) {
+        foreach($html->find('.rankingBox') as $i => $rankBox) {
+            echo $rankBox->find('h3.rankingBoxTtl', 0)->find('a', 0)->innertext;
+            echo PHP_EOL;
+        }
+    }
 
     public function getHtml($url) {
         echo 'start getHTML';
@@ -32,10 +41,14 @@ class CrawlController {
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->ckfile); 
 //        curl_setopt($ch, CURLOPT_POST, TRUE);
         $output = curl_exec($ch);
+        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+            curl_close($ch);
+            return FALSE;
+        }
         curl_close($ch);
 //        echo h($output) . PHP_EOL;
 
-        return $html = str_get_html($output);
+        return str_get_html($output);
     }
 
     public function login() {
