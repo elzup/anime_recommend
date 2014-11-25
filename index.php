@@ -17,7 +17,8 @@ require_once('./controllers/crawl_controller.php');
 require_once('./models/anireco_model.php');
 
 /* include classes */
-// require_once('./classes/memory.php');
+require_once('./classes/title.php');
+
 require_once('./helpers/functions.php');
 
 $app = new \Slim\Slim(array(

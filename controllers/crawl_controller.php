@@ -27,10 +27,19 @@ class CrawlController {
     }
 
     public function getTitlesManagePage($html) {
+        $title_list = array();
         foreach($html->find('.rankingBox') as $i => $rankBox) {
-            echo $rankBox->find('h3.rankingBoxTtl', 0)->find('a', 0)->innertext;
-            echo PHP_EOL;
+            $atitle = $rankBox->find('h3.rankingBoxTtl', 0)->find('a', 0);
+            $name = $atitle->innertext;
+            preg_match('#/(?<id>[0-9]*)/$#U', $atitle->href, $m);
+            $title_id = $m['id'];
+            preg_match('#/(?<ye>[0-9]+)/(?<se>.*)/$#', $rankBox->find('.rankingBoxInfor', 0)->find('a', 0)->href, $m);
+            $year = $m['ye'];
+            $season = $m['se'];
+            $imgurl = $rankBox->find('.rankingMainBox', 0)->find('img', 0)->src;
+            $title_list[] = new Title($title_id, $name, $year, $season, $imgurl);
         }
+        var_dump($title_list);
     }
 
     public function getHtml($url) {
