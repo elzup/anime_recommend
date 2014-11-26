@@ -1,9 +1,11 @@
 
 test/
 vendor/
-key.php
+keys.php
 php.ini
 
+env
+env_
 .htaccess
 tmp
 composer.lock

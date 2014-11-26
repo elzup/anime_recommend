@@ -6,22 +6,26 @@
 
 class CrawlController {
 
-
     public $init = FALSE;
     public $ckfile;
+    public $anirecoDAO;
 
     public function getTitles() {
-        set_time_limit(1000);
+        $this->anirecoDAO = new AnirecoModelPDO();
+        set_time_limit(60 * 60);
         $this->login();
-        $end = 1;
-//        $end = 122;
-        foreach (range(1, $end) as $i) {
+//        $end = 1;
+        $end = 122;
+        ob_start();
+        foreach (range(103, $end) as $i) {
             $html = $this->getHtml(URL_ANICORE_RANK . $i);
             if ($html === FALSE) {
                 echo 'exit';
                 break;
             }
             $this->getTitlesManagePage($html);
+            echo $i . PHP_EOL;
+            my_flush();
 //            exit;
         }
     }
@@ -29,17 +33,24 @@ class CrawlController {
     public function getTitlesManagePage($html) {
         $title_list = array();
         foreach($html->find('.rankingBox') as $i => $rankBox) {
+            echo '*';
             $atitle = $rankBox->find('h3.rankingBoxTtl', 0)->find('a', 0);
             $name = $atitle->innertext;
             preg_match('#/(?<id>[0-9]*)/$#U', $atitle->href, $m);
             $title_id = $m['id'];
-            preg_match('#/(?<ye>[0-9]+)/(?<se>.*)/$#', $rankBox->find('.rankingBoxInfor', 0)->find('a', 0)->href, $m);
-            $year = $m['ye'];
-            $season = $m['se'];
-            $imgurl = $rankBox->find('.rankingMainBox', 0)->find('img', 0)->src;
+            $divinfo = $rankBox->find('.rankingBoxInfor', 0);
+            if (@$divinfo->find('a', 0) && preg_match('#/(?<ye>[0-9]+)/(?<se>.*)/$#', $divinfo->find('a', 0)->href, $m)) {
+                $year = $m['ye'];
+                $season = season_to_num($m['se']);
+            } else {
+                $year = 0;
+                $season = 4;
+            }
+            $imgurl = url_trim_param($rankBox->find('.rankingMainBox', 0)->find('img', 0)->src);
             $title_list[] = new Title($title_id, $name, $year, $season, $imgurl);
         }
-        var_dump($title_list);
+        $this->anirecoDAO->regist_titles($title_list);
+        echo 'end regist';
     }
 
     public function getHtml($url) {
