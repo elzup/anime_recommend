@@ -15,7 +15,7 @@ class AnirecoModelPDO extends PDO {
     // ----------------- DB Manage Wrap ----------------- //
 
     public function regist_titles($titles) {
-        $sql_head = 'INSERT INTO `' . DB_TN_TITLE . '` (`' . DB_CN_TITLE_ANI_TITLE_ID . '`, `' . DB_CN_TITLE_TITLE_NAME . '`, `' . DB_CN_TITLE_TITLE_YEAR . '`, `' . DB_CN_TITLE_TITLE_SEASON. '`, `' . DB_CN_TITLE_TITLE_IMGURL . '`) VALUES';
+        $sql_head = 'INSERT INTO `' . DB_TN_TITLES . '` (`' . DB_CN_TITLES_ANI_TITLE_ID . '`, `' . DB_CN_TITLES_TITLE_NAME . '`, `' . DB_CN_TITLES_TITLE_YEAR . '`, `' . DB_CN_TITLES_TITLE_SEASON. '`, `' . DB_CN_TITLES_TITLE_IMGURL . '`) VALUES';
         $sql_values = array();
         for ($i = 0; $i < count($titles); $i++) {
             $sql_values[] = "(:ID$i, :NAME$i, :YEAR$i, :SEASON$i, :IMGURL$i)";
@@ -28,6 +28,22 @@ class AnirecoModelPDO extends PDO {
             $stmt->bindValue(":YEAR$i", $title->year);
             $stmt->bindValue(":SEASON$i", $title->season);
             $stmt->bindValue(":IMGURL$i", $title->imgurl);
+        }
+        return $stmt->execute();
+    }
+
+    public function regist_bests($bests) {
+        $sql_head = 'INSERT INTO `' . DB_TN_BESTS . '` (`' . DB_CN_BESTS_ANI_BEST_ID . '`, `' . DB_CN_BESTS_BEST_NAME . '`, `' . DB_CN_BESTS_THANKYOU . '`) VALUES';
+        $sql_values = array();
+        for ($i = 0; $i < count($bests); $i++) {
+            $sql_values[] = "(:ID$i, :NAME$i, :THANK$i)";
+        }
+        $sql = $sql_head . implode(',', $sql_values);
+        $stmt = $this->prepare($sql);
+        foreach ($bests as $i => $best) {
+            $stmt->bindValue(":ID$i", $best->best_id);
+            $stmt->bindValue(":NAME$i", $best->name);
+            $stmt->bindValue(":THANK$i", $best->thankyou);
         }
         return $stmt->execute();
     }

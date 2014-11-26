@@ -10,15 +10,56 @@ class CrawlController {
     public $ckfile;
     public $anirecoDAO;
 
-    public function getTitles() {
+    public function getBests() {
         $this->anirecoDAO = new AnirecoModelPDO();
         set_time_limit(60 * 60);
         $this->login();
 //        $end = 1;
+        $start = 1;
+        $end = 371;
+        my_flush_prepare();
+
+        foreach (range($start, $end) as $i) {
+            $html = $this->getHtml(URL_ANICORE_BEST . $i);
+            if ($html === FALSE) {
+                echo 'exit';
+                break;
+            }
+            $this->getBestsManagePage($html);
+            echo $i . PHP_EOL;
+            my_flush();
+        }
+    }
+
+    public function getBestsManagePage($html) {
+        $this->anirecoDAO = new AnirecoModelPDO();
+        $best_list = array();
+        foreach($html->find('.best_ranking_box') as $i => $rankBox) {
+            echo '*';
+            $atitle = $rankBox->find('div.best_ranking_box_title', 0)->find('a', 0);
+            $name = $atitle->innertext;
+            preg_match('#/(?<id>[0-9]*)/?$#U', $atitle->href, $m);
+            $best_id = $m['id'];
+            if ($rankingBox = $rankBox->find('.best_ranking_box_rank', 0)) {
+                $thankyou = substr($rankingBox->find('img', 0)->src, -5, 1);
+            } else {
+                $thankyou = $rankBox->find('.best_ranking_box_rank2', 0)->find('span', 0)->innertext;
+            }
+            $best_list[] = new Best($best_id, $name, $thankyou);
+        }
+        $this->anirecoDAO->regist_bests($best_list);
+        echo 'end regist';
+    }
+
+    public function getTitles() {
+        $this->anirecoDAO = new AnirecoModelPDO();
+        set_time_limit(60 * 60);
+        $this->login();
         $end = 122;
-        ob_start();
-        foreach (range(103, $end) as $i) {
-            $html = $this->getHtml(URL_ANICORE_RANK . $i);
+        my_flush_prepare();
+
+        foreach (range(1, $end) as $i) {
+            $html = $this->getHtml(URL_ANICORE_TITLE . $i);
             if ($html === FALSE) {
                 echo 'exit';
                 break;
@@ -26,7 +67,6 @@ class CrawlController {
             $this->getTitlesManagePage($html);
             echo $i . PHP_EOL;
             my_flush();
-//            exit;
         }
     }
 
@@ -59,15 +99,12 @@ class CrawlController {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->ckfile); 
-//        curl_setopt($ch, CURLOPT_POST, TRUE);
         $output = curl_exec($ch);
         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
             curl_close($ch);
             return FALSE;
         }
         curl_close($ch);
-//        echo h($output) . PHP_EOL;
-
         return str_get_html($output);
     }
 

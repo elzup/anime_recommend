@@ -21,9 +21,16 @@ function url_trim_param($url) {
     return $url;
 }
 
-function my_flush(){
-    flush();
-    ob_end_flush();
+
+function my_flush_prepare() {
     ob_start();
+    echo str_pad(" ",4096)."<br />\n";
+    ob_end_flush();
+    ob_start('mb_output_handler');
+}
+
+function my_flush(){
+    ob_flush();
+    flush();
 }
 
