@@ -14,7 +14,8 @@ class CrawlController {
         $this->anirecoDAO = new AnirecoModelPDO();
         set_time_limit(60 * 60 * 60);
         // TODO: get bests from db
-        $ids = $this->anirecoDAO->select_bests_ids();
+        $ids = $this->anirecoDAO->select_bests_ids_next();
+//        $ids = $this->anirecoDAO->select_bests_ids();
         $this->login();
 
         ob_start();
@@ -26,14 +27,13 @@ class CrawlController {
         foreach ($ids as $ido) {
             $id = $ido[DB_CN_BESTS_ANI_BEST_ID];
             $html = $this->getHtml(URL_ANICORE_RANK . $id);
-            echo  $id . ',';
             if ($html === FALSE) {
                 echo 'exit';
                 break;
             }
             $this->getRanksManagePage($html, $id);
             echo '*';
-            if ($k * 50 > $id) {
+            if ($k * 50 < $id) {
                 $k++;
                 echo $k . PHP_EOL;
                 ob_flush();

@@ -64,6 +64,11 @@ class AnirecoModelPDO extends PDO {
         return $stmt->execute();
     }
 
+    public function select_bests_ids_next() {
+        $next_id = $this->select_ranks_last_best_id() ?: 0;
+        return $this->select_bests_ids($next_id);
+    }
+
     public function select_bests_ids($since = 0) {
         $sql = 'SELECT `' . DB_CN_BESTS_ANI_BEST_ID . '` from `' . DB_TN_BESTS . '`';
         if ($since != 0) {
@@ -71,6 +76,15 @@ class AnirecoModelPDO extends PDO {
         }
         $stmt = $this->query($sql);
         return $stmt->fetchAll();
+    }
+
+    public function select_ranks_last_best_id() {
+        $sql = 'SELECT `' . DB_CN_RANKS_BEST_ID . '` from `' . DB_TN_RANKS . '` ORDER BY `' . DB_CN_RANKS_BEST_ID . '` DESC LIMIT 1';
+        $stmt = $this->query($sql);
+        if ($res = $stmt->fetch()) {
+            return $res[DB_CN_RANKS_BEST_ID];
+        }
+        return FALSE;
     }
 
 }
