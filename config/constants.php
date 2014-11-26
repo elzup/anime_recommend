@@ -2,6 +2,7 @@
 
 define('URL_ANICORE_TITLE', 'http://www.anikore.jp/pop_ranking/page:');
 define('URL_ANICORE_BEST', 'http://www.anikore.jp/best10_ranking/thanks/page:');
+define('URL_ANICORE_RANK', 'http://www.anikore.jp/anime_rankings/view/');
 define('URL_ANICORE_REGIST', 'http://www.anikore.jp/users/add/');
 define('URL_ANICORE_LOGIN', 'http://www.anikore.jp/users/login/');
 
@@ -25,7 +26,7 @@ define('DB_CN_BESTS_ANI_BEST_ID'  , 'ani_best_id');
 define('DB_CN_BESTS_BEST_NAME'    , 'best_name');
 define('DB_CN_BESTS_THANKYOU'     , 'thankyou');
 
-define('DB_TN_RANKS'          , 'ar_bests');
+define('DB_TN_RANKS'          , 'ar_ranks');
 define('DB_CN_RANKS_ID'       , 'rank_id');
 define('DB_CN_RANKS_TITLE_ID' , 'title_id');
 define('DB_CN_RANKS_BEST_ID'  , 'best_id');

@@ -19,6 +19,7 @@ require_once('./models/anireco_model.php');
 /* include classes */
 require_once('./classes/title.php');
 require_once('./classes/best.php');
+require_once('./classes/rank.php');
 
 require_once('./helpers/functions.php');
 
@@ -33,6 +34,7 @@ $app->get('/', '\PageController:showIndex');
 
 $app->get('/get_titles', '\CrawlController:getTitles');
 $app->get('/get_bests', '\CrawlController:getBests');
+$app->get('/get_ranks', '\CrawlController:getRanks');
 
 //$app->get('/job/d', '\JobController:tweet_day');
 //$app->get('/job/r/:word', function($word) {

@@ -10,6 +10,52 @@ class CrawlController {
     public $ckfile;
     public $anirecoDAO;
 
+    public function getRanks() {
+        $this->anirecoDAO = new AnirecoModelPDO();
+        set_time_limit(60 * 60 * 60);
+        // TODO: get bests from db
+        $ids = $this->anirecoDAO->select_bests_ids();
+        $this->login();
+
+        ob_start();
+        echo str_pad(" ",4096)."<br />\n";
+        ob_end_flush();
+        ob_start('mb_output_handler');
+
+        $k = 0;
+        foreach ($ids as $ido) {
+            $id = $ido[DB_CN_BESTS_ANI_BEST_ID];
+            $html = $this->getHtml(URL_ANICORE_RANK . $id);
+            echo  $id . ',';
+            if ($html === FALSE) {
+                echo 'exit';
+                break;
+            }
+            $this->getRanksManagePage($html, $id);
+            echo '*';
+            if ($k * 50 > $id) {
+                $k++;
+                echo $k . PHP_EOL;
+                ob_flush();
+                flush();
+            }
+        }
+    }
+
+    public function getRanksManagePage($html, $best_id) {
+        $rank_list = array();
+        foreach($html->find('.myranking_detail_rank_title') as $i => $rankBox) {
+            $atitle = $rankBox->find('a', 0);
+            if (!$atitle) {
+                continue;
+            }
+            preg_match('#/(?<id>[0-9]*)/?$#U', $atitle->href, $m);
+            $title_id = $m['id'];
+            $rank_list[] = new Rank($title_id, $best_id, $i + 1);
+        }
+        $this->anirecoDAO->regist_ranks($rank_list);
+    }
+
     public function getBests() {
         $this->anirecoDAO = new AnirecoModelPDO();
         set_time_limit(60 * 60);
@@ -32,7 +78,6 @@ class CrawlController {
     }
 
     public function getBestsManagePage($html) {
-        $this->anirecoDAO = new AnirecoModelPDO();
         $best_list = array();
         foreach($html->find('.best_ranking_box') as $i => $rankBox) {
             echo '*';
@@ -48,7 +93,6 @@ class CrawlController {
             $best_list[] = new Best($best_id, $name, $thankyou);
         }
         $this->anirecoDAO->regist_bests($best_list);
-        echo 'end regist';
     }
 
     public function getTitles() {
@@ -90,11 +134,9 @@ class CrawlController {
             $title_list[] = new Title($title_id, $name, $year, $season, $imgurl);
         }
         $this->anirecoDAO->regist_titles($title_list);
-        echo 'end regist';
     }
 
     public function getHtml($url) {
-        echo 'start getHTML';
         $ch = curl_init ($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);

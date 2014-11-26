@@ -12,6 +12,4 @@ class  Best {
         $this->thankyou = $thankyou;
     }
 
-    public function install() {
-    }
 }
