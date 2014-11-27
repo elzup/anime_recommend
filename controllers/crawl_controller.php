@@ -12,11 +12,13 @@ class CrawlController {
 
     public function getRanks() {
         $this->anirecoDAO = new AnirecoModelPDO();
-        set_time_limit(60 * 60 * 60);
+        set_time_limit(24 * 60 * 60);
         // TODO: get bests from db
         $ids = $this->anirecoDAO->select_bests_ids_next();
 //        $ids = $this->anirecoDAO->select_bests_ids();
         $this->login();
+//        var_dump($ids);
+        unset($ids[0]);
 
         ob_start();
         echo str_pad(" ",4096)."<br />\n";
@@ -99,10 +101,11 @@ class CrawlController {
         $this->anirecoDAO = new AnirecoModelPDO();
         set_time_limit(60 * 60);
         $this->login();
-        $end = 122;
+        $start = 1;
+        $end = 2;
+//        $end = 122;
         my_flush_prepare();
-
-        foreach (range(1, $end) as $i) {
+        foreach (range($start, $end) as $i) {
             $html = $this->getHtml(URL_ANICORE_TITLE . $i);
             if ($html === FALSE) {
                 echo 'exit';
@@ -127,7 +130,7 @@ class CrawlController {
                 $year = $m['ye'];
                 $season = season_to_num($m['se']);
             } else {
-                $year = 0;
+                $year   = 0;
                 $season = 4;
             }
             $imgurl = url_trim_param($rankBox->find('.rankingMainBox', 0)->find('img', 0)->src);

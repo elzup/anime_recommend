@@ -29,7 +29,11 @@ class AnirecoModelPDO extends PDO {
             $stmt->bindValue(":SEASON$i", $title->season);
             $stmt->bindValue(":IMGURL$i", $title->imgurl);
         }
-        return $stmt->execute();
+        $res = $stmt->execute();
+        if (!$res) {
+            echo $titles[0]->title_id . '×';
+        }
+        return  $res;
     }
 
     public function regist_bests($bests) {
@@ -55,12 +59,18 @@ class AnirecoModelPDO extends PDO {
             $sql_values[] = "(:BI$i, :TI$i, :NUM$i)";
         }
         $sql = $sql_head . implode(',', $sql_values);
+        $real_query = $sql;
         $stmt = $this->prepare($sql);
         foreach ($ranks as $i => $rank) {
             $stmt->bindValue(":BI$i", $rank->best_id);
             $stmt->bindValue(":TI$i", $rank->title_id);
             $stmt->bindValue(":NUM$i", $rank->rank_num);
+            $real_query = str_replace(array(":BI$i", ":TI$i", ":NUM$i"), array($rank->best_id, $rank->title_id, $rank->rank_num), $real_query);
         }
+        var_dump($stmt);
+        var_dump($ranks);
+        var_dump($real_query);
+        exit;
         return $stmt->execute();
     }
 

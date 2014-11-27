@@ -10,3 +10,4 @@ env_
 tmp
 composer.lock
 
+lib/openslopeone/config.ini.php
