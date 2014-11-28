@@ -74,6 +74,58 @@ class AnirecoModelPDO extends PDO {
         return $stmt->execute();
     }
 
+    public function load_best($best_id) {
+        $rec_best = $this->select_best($best_id);
+        if ($rec_best === FALSE) {
+            return NULL;
+        }
+        $rec_ranks = $this->select_ranks($best_id);
+        $rank_list = $this->wrap_ranks($rec_ranks);
+        $best = new Best();
+        $best->install($rec_best, $rank_list);
+        return $best;
+    }
+
+    private function wrap_ranks($rec_ranks) {
+        $rank_list = array();
+        foreach ($rec_ranks as $rec_rank) {
+            $rank_list[] = $this->wrap_rank($rec_rank);
+        }
+        return $rank_list;
+    }
+
+    private function wrap_rank($rec_rank) {
+        $rank = new Rank();
+        $rank->install($rec_rank);
+        return $rank;
+    }
+
+    public function wrap_best($reco) {
+        if ($reco === FALSE) {
+            return FALSE;
+        }
+        $best = new Best();
+        $best->install($reco, NULL);
+        return $best;
+    }
+
+    public function load_title($title_id) {
+    }
+
+    public function select_ranks($best_id) {
+        $sql = 'SELECT * from `' . DB_TN_RANKS . '` WHERE `' . DB_CN_RANKS_BEST_ID . '` = :ID ORDER BY `' . DB_CN_RANKS_RANK_NUM . '`';
+        $stmt = $this->prepare($sql);
+        $stmt->bindValue(":ID", $best_id);
+        return $stmt->execute() ? $stmt->fetchAll() : FALSE;
+    }
+
+    public function select_best($best_id) {
+        $sql = 'SELECT * from `' . DB_TN_BESTS . '` WHERE `' . DB_CN_BESTS_ANI_BEST_ID . '` = :ID';
+        $stmt = $this->prepare($sql);
+        $stmt->bindValue(":ID", $best_id);
+        return $stmt->execute() ? $stmt->fetch() : FALSE;
+    }
+
     public function select_bests_ids_next() {
         $next_id = $this->select_ranks_last_best_id() ?: 0;
         return $this->select_bests_ids($next_id);

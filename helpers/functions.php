@@ -34,3 +34,6 @@ function my_flush(){
     flush();
 }
 
+function calc_collaborative_filtering(Best $best1, Best $best2) {
+}
+

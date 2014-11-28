@@ -13,7 +13,6 @@ class CrawlController {
     public function getRanks() {
         $this->anirecoDAO = new AnirecoModelPDO();
         set_time_limit(24 * 60 * 60);
-        // TODO: get bests from db
         $ids = $this->anirecoDAO->select_bests_ids_next();
 //        $ids = $this->anirecoDAO->select_bests_ids();
         $this->login();

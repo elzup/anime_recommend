@@ -31,6 +31,7 @@ $app = new \Slim\Slim(array(
 ));
 
 $app->get('/', '\PageController:showIndex');
+$app->get('/cf', '\PageController:cf_check');
 
 $app->get('/get_titles', '\CrawlController:getTitles');
 $app->get('/get_bests', '\CrawlController:getBests');
