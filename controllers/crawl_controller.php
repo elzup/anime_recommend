@@ -1,7 +1,3 @@
-<!DOCTYPE html>
-<meta charset="UTF-8">
-<title></title>
-<pre>
 <?php
 
 class CrawlController {
@@ -14,8 +10,8 @@ class CrawlController {
         $this->anirecoDAO = new AnirecoModelPDO();
         set_time_limit(24 * 60 * 60);
         $ids = $this->anirecoDAO->select_bests_ids_next();
-//		var_dump($ids);
-//		exit;
+		var_dump($ids);
+		exit;
 //        $ids = $this->anirecoDAO->select_bests_ids();
         $this->login();
         // debug

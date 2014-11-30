@@ -129,6 +129,15 @@ class AnirecoModelPDO extends PDO {
         return $this->select_bests_ids($next_id);
     }
 
+    public function select_ranks_ids($since = 0) {
+        $sql = 'SELECT `' . DB_CN_BESTS_ANI_BEST_ID . '` from `' . DB_TN_RANKS . '`';
+        if ($since != 0) {
+            $sql .= ' WHERE `' . DB_CN_BESTS_ANI_BEST_ID . '` > ' . $since;
+        }
+        $stmt = $this->query($sql);
+        return $stmt->fetchAll();
+    }
+
     public function select_bests_ids($since = 0) {
         $sql = 'SELECT `' . DB_CN_BESTS_ANI_BEST_ID . '` from `' . DB_TN_BESTS . '`';
         if ($since != 0) {

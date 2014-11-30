@@ -30,9 +30,12 @@ $app = new \Slim\Slim(array(
     'cookies.encrypt'    => true,    //cookie
 ));
 
+// views
 $app->get('/', '\PageController:showIndex');
 $app->get('/cf', '\PageController:cf_check');
+$app->get('/reco', '\PageController:showReco');
 
+// crawls
 $app->get('/get_titles', '\CrawlController:getTitles');
 $app->get('/get_bests', '\CrawlController:getBests');
 $app->get('/get_ranks', '\CrawlController:getRanks');

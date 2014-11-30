@@ -14,6 +14,7 @@ define('TITLE_LOGIN', 'ログイン-あにこれ参加でできること【あ�
 
 define('SITE_TITLE', 'あにれこ');
 define('SITE_DESCRIPTION', 'アニメレコメンドシステム');
+define('SITE_URL', 'http://localhost/anireco/');
 
 define('DB_TN_TITLES'              , 'ar_titles');
 define('DB_CN_TITLES_ID'           , 'title_id');

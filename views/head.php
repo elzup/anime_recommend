@@ -1,12 +1,14 @@
 <?php
-/* @var $title string */
+/* @var $page_title string */
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="UTF-8">
-		<title><?= $title ?></title>
-		<link rel="stylesheet" href="../style/style.css">
-		<script src="../js/script.js"></script>
+		<title><?= $page_title ?></title>
+		<link rel="stylesheet" href="./lib/cssreset-min.css">
+		<link rel="stylesheet" href="./style/style.css">
+		<script src="./lib/jquery-2.1.1.min.js"></script>
+		<script src="./js/script.js"></script>
 	</head>
 	<body>

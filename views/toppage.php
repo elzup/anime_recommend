@@ -2,6 +2,6 @@
 /* @var $title Title */
 ?>
 <section class="wrapper">
-<h2></h2>
+<h2><?= $title->name ?></h2>
 
 </section>
