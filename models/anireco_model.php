@@ -53,7 +53,7 @@ class AnirecoModelPDO extends PDO {
     }
 
     public function regist_ranks($ranks) {
-        $sql_head = 'INSERT INTO `' . DB_TN_RANKS . '` (`' . DB_CN_RANKS_BEST_ID . '`, `' . DB_CN_RANKS_TITLE_ID . '`, `' . DB_CN_RANKS_RANK_NUM . '`) VALUES';
+        $sql_head = 'INSERT INTO `' . DB_TN_RANKS . '` (`' . DB_CN_RANKS_ANI_BEST_ID . '`, `' . DB_CN_RANKS_ANI_TITLE_ID . '`, `' . DB_CN_RANKS_RANK_NUM . '`) VALUES';
         $sql_values = array();
         for ($i = 0; $i < count($ranks); $i++) {
             $sql_values[] = "(:BI$i, :TI$i, :NUM$i)";
@@ -67,11 +67,12 @@ class AnirecoModelPDO extends PDO {
             $stmt->bindValue(":NUM$i", $rank->rank_num);
             $real_query = str_replace(array(":BI$i", ":TI$i", ":NUM$i"), array($rank->best_id, $rank->title_id, $rank->rank_num), $real_query);
         }
-        var_dump($stmt);
-        var_dump($ranks);
-        var_dump($real_query);
-        exit;
-        return $stmt->execute();
+        if (!$stmt->execute()) {
+            var_dump($stmt);
+            var_dump($ranks);
+            var_dump($real_query);
+            exit;
+        }
     }
 
     public function load_best($best_id) {
@@ -109,9 +110,6 @@ class AnirecoModelPDO extends PDO {
         return $best;
     }
 
-    public function load_title($title_id) {
-    }
-
     public function select_ranks($best_id) {
         $sql = 'SELECT * from `' . DB_TN_RANKS . '` WHERE `' . DB_CN_RANKS_BEST_ID . '` = :ID ORDER BY `' . DB_CN_RANKS_RANK_NUM . '`';
         $stmt = $this->prepare($sql);
@@ -141,10 +139,11 @@ class AnirecoModelPDO extends PDO {
     }
 
     public function select_ranks_last_best_id() {
-        $sql = 'SELECT `' . DB_CN_RANKS_BEST_ID . '` from `' . DB_TN_RANKS . '` ORDER BY `' . DB_CN_RANKS_BEST_ID . '` DESC LIMIT 1';
+        $sql = 'SELECT `' . DB_CN_RANKS_ANI_BEST_ID . '` from `' . DB_TN_RANKS . '` ORDER BY `' . DB_CN_RANKS_ANI_BEST_ID . '` DESC LIMIT 1';
         $stmt = $this->query($sql);
-        if ($res = $stmt->fetch()) {
-            return $res[DB_CN_RANKS_BEST_ID];
+		$res = $stmt->fetch();
+        if ($res) {
+            return $res[DB_CN_RANKS_ANI_BEST_ID];
         }
         return FALSE;
     }

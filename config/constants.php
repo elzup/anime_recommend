@@ -16,6 +16,7 @@ define('DB_TN_TITLES'              , 'ar_titles');
 define('DB_CN_TITLES_ID'           , 'title_id');
 define('DB_CN_TITLES_ANI_TITLE_ID' , 'ani_title_id');
 define('DB_CN_TITLES_TITLE_NAME'   , 'title_name');
+define('DB_CN_TITLES_TITLE_TYPE'   , 'title_type');
 define('DB_CN_TITLES_TITLE_YEAR'   , 'title_year');
 define('DB_CN_TITLES_TITLE_SEASON' , 'title_season');
 define('DB_CN_TITLES_TITLE_IMGURL' , 'title_imgurl');
@@ -31,4 +32,7 @@ define('DB_CN_RANKS_ID'       , 'rank_id');
 define('DB_CN_RANKS_TITLE_ID' , 'title_id');
 define('DB_CN_RANKS_BEST_ID'  , 'best_id');
 define('DB_CN_RANKS_RANK_NUM' , 'rank_num');
+
+define('DB_CN_RANKS_ANI_BEST_ID' , 'ani_best_id');
+define('DB_CN_RANKS_ANI_TITLE_ID' , 'ani_title_id');
 

@@ -16,8 +16,8 @@ class CrawlController {
         $ids = $this->anirecoDAO->select_bests_ids_next();
 //        $ids = $this->anirecoDAO->select_bests_ids();
         $this->login();
-//        var_dump($ids);
-        unset($ids[0]);
+        // debug
+//        unset($ids[0]);
 
         ob_start();
         echo str_pad(" ",4096)."<br />\n";

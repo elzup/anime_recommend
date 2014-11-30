@@ -37,3 +37,17 @@ function my_flush(){
 function calc_collaborative_filtering(Best $best1, Best $best2) {
 }
 
+function standard_deviation(Array $nums) {
+    $count = count($nums);
+    $aveg = array_sum($nums) / $count;
+    $d = 0;
+    foreach ($nums as $n) {
+        $d += pow($n - $aveg, 2);
+    }
+    return sqrt($d / ($count - 1));
+}
+
+function array_average($arr) {
+    return array_sum($nums) / count($nums);
+}
+

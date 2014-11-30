@@ -4,6 +4,7 @@ class Title {
     public $id;
     public $title_id;
     public $name;
+    public $type;
     public $year;
     public $season;
     public $imgurl;
