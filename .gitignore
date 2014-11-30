@@ -10,5 +10,8 @@ env_
 tmp
 composer.lock
 
+*.css
+*.js
+
 lib/openslopeone/config.ini.php
 /nbproject/private/

@@ -12,6 +12,9 @@ define('HTTP_RESPONSE_HEADER_CODE_301', 'HTTP/1.1 301 ');
 define('TITLE_REGIST', 'あにこれβに新規登録！！【あにこれβ】');
 define('TITLE_LOGIN', 'ログイン-あにこれ参加でできること【あにこれβ】');
 
+define('SITE_TITLE', 'あにれこ');
+define('SITE_DESCRIPTION', 'アニメレコメンドシステム');
+
 define('DB_TN_TITLES'              , 'ar_titles');
 define('DB_CN_TITLES_ID'           , 'title_id');
 define('DB_CN_TITLES_ANI_TITLE_ID' , 'ani_title_id');

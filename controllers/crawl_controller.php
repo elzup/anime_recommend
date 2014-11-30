@@ -25,9 +25,16 @@ class CrawlController {
         foreach ($ids as $ido) {
             $id = $ido[DB_CN_BESTS_ANI_BEST_ID];
             $html = $this->getHtml(URL_ANICORE_RANK . $id);
-            if ($html === FALSE) {
-                echo 'exit';
-                break;
+			$c = 0;
+            while ($html === FALSE && $c < 5) {
+				echo 'redirect' . PHP_EOL;
+				$c++;
+				$this->login();
+				$html = $this->getHtml(URL_ANICORE_RANK . $id);
+				if ($c > 5) {
+					echo 'count out exit';
+					break;
+				}
             }
             $this->getRanksManagePage($html, $id);
             echo '*';
