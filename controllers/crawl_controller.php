@@ -14,17 +14,14 @@ class CrawlController {
         $this->anirecoDAO = new AnirecoModelPDO();
         set_time_limit(24 * 60 * 60);
         $ids = $this->anirecoDAO->select_bests_ids_next();
+//		var_dump($ids);
+//		exit;
 //        $ids = $this->anirecoDAO->select_bests_ids();
         $this->login();
         // debug
 //        unset($ids[0]);
 
-        ob_start();
-        echo str_pad(" ",4096)."<br />\n";
-        ob_end_flush();
-        ob_start('mb_output_handler');
-
-        $k = 0;
+        $k = $ids[0][0];
         foreach ($ids as $ido) {
             $id = $ido[DB_CN_BESTS_ANI_BEST_ID];
             $html = $this->getHtml(URL_ANICORE_RANK . $id);
@@ -37,8 +34,6 @@ class CrawlController {
             if ($k * 50 < $id) {
                 $k++;
                 echo $k . PHP_EOL;
-                ob_flush();
-                flush();
             }
         }
     }
@@ -54,8 +49,30 @@ class CrawlController {
             $title_id = $m['id'];
             $rank_list[] = new Rank($title_id, $best_id, $i + 1);
         }
+		$this->uniqueRanks($rank_list);
         $this->anirecoDAO->regist_ranks($rank_list);
     }
+
+	/**
+	 * 
+	 * @param Rank[] $ranks
+	 */
+	function uniqueRanks(&$ranks) {
+		$ids = array();
+		$k = FALSE;
+		foreach ($ranks as $i => $rank) {
+			$id = $rank->title_id;
+			if (in_array($id, $ids)) {
+				unset($ranks[$i]);
+				$k = TRUE;
+				continue;
+			}
+			$ids[] = $id;
+		}
+		if ($k) {
+			$ranks = array_values($ranks);
+		}
+	}
 
     public function getBests() {
         $this->anirecoDAO = new AnirecoModelPDO();
