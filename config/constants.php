@@ -1,11 +1,11 @@
 <?php
 
 define('URL_ANICORE_TITLE', 'http://www.anikore.jp/pop_ranking/page:');
+define('URL_ANICORE_TITLEPAGE', 'http://www.anikore.jp/anime/');
 define('URL_ANICORE_BEST', 'http://www.anikore.jp/best10_ranking/thanks/page:');
 define('URL_ANICORE_RANK', 'http://www.anikore.jp/anime_rankings/view/');
 define('URL_ANICORE_REGIST', 'http://www.anikore.jp/users/add/');
 define('URL_ANICORE_LOGIN', 'http://www.anikore.jp/users/login/');
-
 
 define('HTTP_RESPONSE_HEADER_CODE_301', 'HTTP/1.1 301 ');
 

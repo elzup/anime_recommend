@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="./lib/cssreset-min.css">
 		<link rel="stylesheet" href="./style/style.css">
 		<script src="./lib/jquery-2.1.1.min.js"></script>
+        <script src="./lib/jquery.cookie.js"></script>
 		<script src="./js/script.js"></script>
 	</head>
 	<body>

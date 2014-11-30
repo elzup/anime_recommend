@@ -40,6 +40,9 @@ $app->get('/get_titles', '\CrawlController:getTitles');
 $app->get('/get_bests', '\CrawlController:getBests');
 $app->get('/get_ranks', '\CrawlController:getRanks');
 
+// update
+$app->get('/update_ranks', '\CrawlController:updateRanks');
+
 //$app->get('/job/d', '\JobController:tweet_day');
 //$app->get('/job/r/:word', function($word) {
 //	(new JobController()).regist_word($word);

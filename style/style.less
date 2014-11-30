@@ -3,19 +3,60 @@
 @col_main: orange;
 @col_font_main: white;
 
+html, body {
+    font-family:  "Hiragino Kaku Gothic ProN", "游ゴシック", YuGothic, Meiryo, sans-serif;
+}
 h1 {
     font-size: 30px;
 }
 h2 {
     font-size: 30px;
 }
+h3 {
+    font-size: 20px;
+    padding-bottom: 5px;
+}
 
-header {
+header#top-header {
+    .header();
+    a {
+        color: @col_font_main;
+    }
+}
+
+.header() {
     color: @col_font_main;
     background: @col_main;
     padding: 5px 25px;
-    a {
-        color: @col_font_main;
+}
+
+.title-box {
+    margin: 10px;
+    border: solid @col_main + #333;
+    border-radius: 5px;
+    overflow: hidden;
+    header {
+        .header();
+    }
+    .sumnail {
+        max-width: 450px;
+        max-height: 450px;
+    }
+    > div {
+        padding: 5px;
+        float: left;
+    }
+    section.not-view {
+        input {
+            margin: 0 auto;
+            width: 40%;
+        }
+    }
+    section.watched {
+        input {
+            margin: 0 auto;
+            width: 30%;
+        }
     }
 }
 

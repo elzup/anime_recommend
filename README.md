@@ -6,9 +6,6 @@
 [anireco.elzup.com](anireco.elzup.com)
 
 
-
-
-
 ##Acknowledgements
 Anireco uses these libraries.
 
@@ -30,3 +27,10 @@ The MIT License
 [http://slim-lang.com/](http://slim-lang.com/)
 [http://www.slimframework.com/license](http://www.slimframework.com/license)
 
+###jquery-cookie
+The MIT License
+[https://github.com/carhartl/jquery-cookie/blob/master/MIT-LICENSE.txt](https://github.com/carhartl/jquery-cookie/blob/master/MIT-LICENSE.txt)
+
+###yui cssreset
+The BSD License
+[http://yuilibrary.com/yui/docs/cssreset/](http://yuilibrary.com/yui/docs/cssreset/)
