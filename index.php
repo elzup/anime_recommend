@@ -36,12 +36,13 @@ $app->get('/cf', '\PageController:cf_check');
 $app->get('/reco', '\PageController:showReco');
 
 // crawls
-$app->get('/get_titles', '\CrawlController:getTitles');
+$app->get('/get_titles', '\CrawlController:getTitles2');
 $app->get('/get_bests', '\CrawlController:getBests');
 $app->get('/get_ranks', '\CrawlController:getRanks');
 
 // update
 $app->get('/update_ranks', '\CrawlController:updateRanks');
+$app->get('/update_descriptions', '\CrawlController:updateDescriptions');
 
 //$app->get('/job/d', '\JobController:tweet_day');
 //$app->get('/job/r/:word', function($word) {

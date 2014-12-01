@@ -14,11 +14,16 @@ class AnirecoModelPDO extends PDO {
 
 	// ----------------- DB Manage Wrap ----------------- //
 
-	public function regist_titles($titles) {
-		$sql_head = 'INSERT INTO `' . DB_TN_TITLES . '` (`' . DB_CN_TITLES_ANI_TITLE_ID . '`, `' . DB_CN_TITLES_TITLE_NAME . '`, `' . DB_CN_TITLES_TITLE_YEAR . '`, `' . DB_CN_TITLES_TITLE_SEASON . '`, `' . DB_CN_TITLES_TITLE_IMGURL . '`) VALUES';
+    /**
+     * 
+     * @param Title[] $titles
+     * @return type
+     */
+	public function regist_titles(array $titles) {
+		$sql_head = 'INSERT INTO `' . DB_TN_TITLES . '` (`' . DB_CN_TITLES_ANI_TITLE_ID . '`, `' . DB_CN_TITLES_TITLE_NAME . '`, `' . DB_CN_TITLES_TITLE_YEAR . '`, `' . DB_CN_TITLES_TITLE_SEASON . '`, `' . DB_CN_TITLES_TITLE_IMGURL . '`, `' . DB_CN_TITLES_TITLE_TYPE . '`) VALUES';
 		$sql_values = array();
 		for ($i = 0; $i < count($titles); $i++) {
-			$sql_values[] = "(:ID$i, :NAME$i, :YEAR$i, :SEASON$i, :IMGURL$i)";
+			$sql_values[] = "(:ID$i, :NAME$i, :YEAR$i, :SEASON$i, :IMGURL$i, :TYPE$i)";
 		}
 		$sql = $sql_head . implode(',', $sql_values);
 		$stmt = $this->prepare($sql);
@@ -28,10 +33,12 @@ class AnirecoModelPDO extends PDO {
 			$stmt->bindValue(":YEAR$i", $title->year);
 			$stmt->bindValue(":SEASON$i", $title->season);
 			$stmt->bindValue(":IMGURL$i", $title->imgurl);
+			$stmt->bindValue(":TYPE$i", $title->type);
 		}
 		$res = $stmt->execute();
 		if (!$res) {
-			echo $titles[0]->title_id . '×';
+            echo 'x';
+//			echo $titles[0]->title_id . '×';
 		}
 		return $res;
 	}
@@ -95,6 +102,12 @@ class AnirecoModelPDO extends PDO {
 		return $rank_list;
 	}
 
+    private function wrap_title($rec_title) {
+        $title = new Title();
+        $title->install($rec_title);
+        return $title;
+    }
+
 	private function wrap_rank($rec_rank) {
 		$rank = new Rank();
 		$rank->install($rec_rank);
@@ -110,12 +123,30 @@ class AnirecoModelPDO extends PDO {
 		return $best;
 	}
 
+    public function update_titles_description($id, $description) {
+		$sql = 'UPDATE `' . DB_TN_TITLES . '` SET `' . DB_CN_TITLES_TITLE_DESCRIPTION . '` = :DES WHERE `' . DB_CN_TITLES_ID . '` = ' . $id;
+		$stmt = $this->prepare($sql);
+        $stmt->bindValue(":DES", $description);
+		return $stmt->execute();
+    }
+
 	public function select_ranks($best_id) {
 		$sql = 'SELECT * from `' . DB_TN_RANKS . '` WHERE `' . DB_CN_RANKS_BEST_ID . '` = :ID ORDER BY `' . DB_CN_RANKS_RANK_NUM . '`';
 		$stmt = $this->prepare($sql);
 		$stmt->bindValue(":ID", $best_id);
 		return $stmt->execute() ? $stmt->fetchAll() : FALSE;
 	}
+
+    public function load_title($title_id) {
+        return $this->wrap_title($this->select_title($title_id));
+    }
+
+	public function select_title($title_id) {
+        $sql = 'SELECT * from `' . DB_TN_TITLES . '` WHERE `' . DB_CN_TITLES_ID . '` = :ID';
+		$stmt = $this->prepare($sql);
+        $stmt->bindValue(':ID', $title_id);
+        return $stmt->execute();
+    }
 
 	public function select_best($best_id) {
 		$sql = 'SELECT * from `' . DB_TN_BESTS . '` WHERE `' . DB_CN_BESTS_ANI_BEST_ID . '` = :ID';
@@ -182,9 +213,14 @@ class AnirecoModelPDO extends PDO {
 		return $stmt->fetchAll();
 	}
 
+	public function select_all_titles2() {
+		$sql = 'SELECT `title_id`, `ani_title_id` FROM `ar_titles` WHERE `title_description` != 0';
+		$stmt = $this->query($sql);
+		return $stmt->fetchAll();
+	}
+
 	public function update_ranks_title_id() {
         $title_ids = $this->select_all_titles();
-        var_dump($title_ids);
 		foreach ($title_ids as $reco) {
 			$sql = 'UPDATE `ar_ranks` SET `title_id` = ' . $reco[DB_CN_TITLES_ID] . ' WHERE `ani_title_id` = ' . $reco[DB_CN_TITLES_ANI_TITLE_ID];
 			$this->query($sql);
