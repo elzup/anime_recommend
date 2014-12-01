@@ -82,6 +82,14 @@ class AnirecoModelPDO extends PDO {
 		}
 	}
 
+    public function load_bests($best_ids) {
+        $best_list = array();
+        foreach ($best_ids as $id) {
+            $best_list[] = $this->load_best($id);
+        }
+        return $best_list;
+    }
+
 	public function load_best($best_id) {
 		$rec_best = $this->select_best($best_id);
 		if ($rec_best === FALSE) {
@@ -93,6 +101,29 @@ class AnirecoModelPDO extends PDO {
 		$best->install($rec_best, $rank_list);
 		return $best;
 	}
+
+	public function load_rand_title() {
+        $sql = 'SELECT * FROM `ar_titles` WHERE `title_type` = 1 and `title_year` > 2000 and `is_rankin` = 1';
+        $stmt = $this->query($sql);
+        $data = $stmt->fetchAll();
+        return $this->wrap_title($data[array_rand($data)]);
+	}
+
+    public function collect_titles(array $titles) {
+        $title_list = array();
+        foreach($titles as $title_id => $title) {
+            foreach($this->pickup_bests($title_id) as $reco_title) {
+                $title_list[] = $reco_title[DB_CN_RANKS_BEST_ID];
+            }
+        }
+        return $title_list;
+    }
+
+    public function pickup_bests($title_id) {
+		echo $sql = 'SELECT * from `' . DB_TN_RANKS . '` WHERE `' . DB_CN_RANKS_TITLE_ID . '` = ' . $title_id . ' ORDER BY `' . DB_CN_RANKS_RANK_NUM . '`';
+        $stmt = $this->query($sql);
+        return $stmt->fetchAll();
+    }
 
 	private function wrap_ranks($rec_ranks) {
 		$rank_list = array();
@@ -145,11 +176,11 @@ class AnirecoModelPDO extends PDO {
         $sql = 'SELECT * from `' . DB_TN_TITLES . '` WHERE `' . DB_CN_TITLES_ID . '` = :ID';
 		$stmt = $this->prepare($sql);
         $stmt->bindValue(':ID', $title_id);
-        return $stmt->execute();
+		return $stmt->execute() ? $stmt->fetch() : FALSE;
     }
 
 	public function select_best($best_id) {
-		$sql = 'SELECT * from `' . DB_TN_BESTS . '` WHERE `' . DB_CN_BESTS_ANI_BEST_ID . '` = :ID';
+		$sql = 'SELECT * from `' . DB_TN_BESTS . '` WHERE `' . DB_CN_BESTS_ID . '` = :ID';
 		$stmt = $this->prepare($sql);
 		$stmt->bindValue(":ID", $best_id);
 		return $stmt->execute() ? $stmt->fetch() : FALSE;

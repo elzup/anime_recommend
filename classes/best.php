@@ -6,7 +6,7 @@ class  Best {
     public $name;
     public $thankyou;
 
-    /** @var $rank_list Rank[]  */
+    /** @var Rank[]  */
     public $rank_list;
 
     public function __construct($best_id = NULL, $name = NULL, $thankyou = NULL) {

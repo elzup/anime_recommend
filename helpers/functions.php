@@ -21,20 +21,20 @@ function url_trim_param($url) {
     return $url;
 }
 
-
 function my_flush_prepare() {
     ob_start();
-    echo str_pad(" ",4096)."<br />\n";
+    echo str_pad(" ", 4096) . "<br />\n";
     ob_end_flush();
     ob_start('mb_output_handler');
 }
 
-function my_flush(){
+function my_flush() {
     ob_flush();
     flush();
 }
 
 function calc_collaborative_filtering(Best $best1, Best $best2) {
+    
 }
 
 function standard_deviation(Array $nums) {
@@ -51,3 +51,36 @@ function array_average($arr) {
     return array_sum($nums) / count($nums);
 }
 
+/**
+ * 
+ * @param Best[] $best_list
+ * @param type $title_ids
+ */
+function collect_patternA($best_list, $title_ids) {
+    $points = array();
+    foreach ($best_list as $best) {
+        foreach ($best->rank_list as $rank) {
+            if (in_array($rank->title_id, $title_ids)) {
+                continue;
+            }
+            if (!isset($points[$rank->title_id])) {
+                $points[$rank->title_id] = 0;
+            }
+            $points[$rank->title_id] += (10 - $rank->rank_num);
+        }
+    }
+    arsort($points);
+    foreach ($points as $key => $p) {
+        return $key;
+    }
+}
+
+function trim_negative($logs) {
+    $list = array();
+    foreach ($logs as $key => $case) {
+        if ($case == 1 || $case == 2 || $case == 3) {
+            $list[$key] = $case;
+        }
+    }
+    return $list;
+}

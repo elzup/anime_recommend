@@ -10,7 +10,9 @@ class Title {
     public $imgurl;
     public $description;
 
-    public function __construct($title_id, $name, $year, $season, $imgurl) {
+    public $point;
+
+    public function __construct($title_id = NULL, $name = NULL, $year = NULL, $season = NULL, $imgurl = NULL) {
         $this->title_id = $title_id;
         $this->name     = $name;
         $this->year     = $year;
