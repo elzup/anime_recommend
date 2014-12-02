@@ -17,24 +17,26 @@ class PageController {
         $case = @$_POST['case'];
         $id = @$_POST['id'];
         $logs = @$_COOKIE['logs'];
-        $log_num = count($logs);
         if (!$logs) {
             $logs = array();
         } else {
             $logs = unserialize($logs);
-            var_dump($logs);
         }
-        if ($case) {
+        $log_num = count($logs);
+        if (isset($case)) {
             $logs[$id] = $case;
             foreach($logs as $key => $log) {
                 if ($key == "") {
                     unset($logs[$key]);
                 }
             }
+            $logs = trim_negative($logs);
+            if ($log_num > 5) {
+                array_shift($logs);
+            }
             setcookie('logs', serialize($logs));
             $ids = $this->anirecoDAO->collect_titles($logs);
             $best_list = $this->anirecoDAO->load_bests($ids);
-            $logs = trim_negative($logs);
             $title_id = collect_patternA($best_list, array_keys($logs));
             $title = $this->anirecoDAO->load_title($title_id);
         } else {

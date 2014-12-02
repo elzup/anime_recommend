@@ -2,6 +2,7 @@
 /* @var $title Title */
 ?>
 <div id="wrapper">
+    <button class="reset-button">リセット[n:<?= $log_num ?>]</button>
     <section class="title-box">
         <header>
             <h2><?= $title->name ?></h2>

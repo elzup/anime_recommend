@@ -103,7 +103,7 @@ class AnirecoModelPDO extends PDO {
 	}
 
 	public function load_rand_title() {
-        $sql = 'SELECT * FROM `ar_titles` WHERE `title_type` = 1 and `title_year` > 2000 and `is_rankin` = 1';
+        $sql = 'SELECT * FROM `ar_titles` WHERE `title_type` = 1 and `title_year` > 2000 and `is_rankin` = 1 and `title_imgurl` != \'./images/no.png\'';
         $stmt = $this->query($sql);
         $data = $stmt->fetchAll();
         return $this->wrap_title($data[array_rand($data)]);
@@ -120,7 +120,7 @@ class AnirecoModelPDO extends PDO {
     }
 
     public function pickup_bests($title_id) {
-		echo $sql = 'SELECT * from `' . DB_TN_RANKS . '` WHERE `' . DB_CN_RANKS_TITLE_ID . '` = ' . $title_id . ' ORDER BY `' . DB_CN_RANKS_RANK_NUM . '`';
+		$sql = 'SELECT * from `' . DB_TN_RANKS . '` WHERE `' . DB_CN_RANKS_TITLE_ID . '` = ' . $title_id . ' ORDER BY `' . DB_CN_RANKS_RANK_NUM . '`';
         $stmt = $this->query($sql);
         return $stmt->fetchAll();
     }
@@ -233,7 +233,7 @@ class AnirecoModelPDO extends PDO {
 
 	public function update_ranks_best_id() {
 		foreach ($this->select_all_bests() as $reco) {
-			echo $sql = 'UPDATE `ar_ranks` SET `best_id` = ' . $reco[DB_CN_BESTS_ID] . ' WHERE `ani_best_id` = ' . $reco[DB_CN_BESTS_ANI_BEST_ID];
+			$sql = 'UPDATE `ar_ranks` SET `best_id` = ' . $reco[DB_CN_BESTS_ID] . ' WHERE `ani_best_id` = ' . $reco[DB_CN_BESTS_ANI_BEST_ID];
 			$this->query($sql);
 		}
 	}
